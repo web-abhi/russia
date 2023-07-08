@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Search Page</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .search-container .form-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+      }
+      .search-container {
+        text-align: center;
+        margin-top: 50px;
+      }
+      .search-container #search-form {
+        display: inline-flex;
+        width: 80%;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .search-container label {
+        margin-bottom: 5px;
+        text-align: left;
+        color: #78787c;
+      }
+
+      .search-container input[type="text"],
+      .search-container input[type="date"] {
+        padding: 10px;
+        width: 300px;
+        margin-bottom: 10px;
+      }
+
+      .search-container input[type="submit"] {
+        width: 100px;
+        height: 40px;
+        padding: 10px 20px;
+        background-color: rgb(246, 89, 89);
+        border-radius: 5px;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+
+      .search-results {
+        margin-top: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .search-result {
+        margin: 10px;
+        padding: 10px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .search-result > div {
+        width: 400px;
+        display: inline-flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .search-result > div label {
+        width: 50%;
+      }
+      .search-result > div:not(:last-child) {
+        margin-left: 8em;
+      }
+      .search-result > div:last-child {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .search-result img {
+        width: 80%;
+        height: 80%;
+        margin-bottom: 10px;
+        margin-left: -118px;
+      }
+
+      .search-result .label {
+        font-weight: bold;
+        margin-bottom: 3px;
+        text-align: left;
+        display: inline-block;
+      }
+
+      .search-result .value {
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="search-container">
+      <form id="search-form">
+        <div class="form-item">
+          <label for="search-input">Application ID/Passport Number</label>
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Enter an Application ID or Passport Number..."
+            required
+          />
+        </div>
+
+        <div class="form-item">
+          <label for="dob-input">Date of Birth</label>
+          <input type="date" id="dob-input" required />
+        </div>
+
+        <input type="submit" value="Search" />
+      </form>
+    </div>
+
+    <div class="search-results" id="search-results"></div>
+
+    <script>
+      document
+        .getElementById("search-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          var searchValue = document
+            .getElementById("search-input")
+            .value.toLowerCase();
+          var dobValue = document.getElementById("dob-input").value;
+
+          fetch("data.json")
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (data) {
+              var results = data.applicants.filter(function (item) {
+                return (
+                  item.applicantId.toLowerCase().includes(searchValue) ||
+                  item.passportNumber.toLowerCase().includes(searchValue) ||
+                  item.dateOfBirth === dobValue
+                );
+              });
+
+              displayResults(results);
+            })
+            .catch(function (error) {
+              console.log("Error:", error);
+            });
+        });
+
+      function displayResults(results) {
+        var searchResultsElement = document.getElementById("search-results");
+
+        // Clear previous results
+        searchResultsElement.innerHTML = "";
+
+        if (results.length === 0) {
+          var noResultsElement = document.createElement("p");
+          noResultsElement.textContent = "No results found.";
+          searchResultsElement.appendChild(noResultsElement);
+        } else {
+          results.forEach(function (result) {
+            var resultElement = document.createElement("div");
+            resultElement.className = "search-result";
+
+            var nameLabel = document.createElement("span");
+            nameLabel.className = "label";
+            nameLabel.textContent = "Applicant Name:";
+
+            var nameElement = document.createElement("span");
+            nameElement.className = "value";
+            nameElement.textContent = result.name;
+
+            var idLabel = document.createElement("span");
+            idLabel.className = "label";
+            idLabel.textContent = "Applicant ID:";
+
+            var idElement = document.createElement("span");
+            idElement.className = "value";
+            idElement.textContent = result.applicantId;
+
+            var passportLabel = document.createElement("span");
+            passportLabel.className = "label";
+            passportLabel.textContent = "Passport Number:";
+
+            var passportElement = document.createElement("span");
+            passportElement.className = "value";
+            passportElement.textContent = result.passportNumberr;
+
+            var imageElement = document.createElement("img");
+            imageElement.src = "visa.jpg";
+
+            var nameDiv = document.createElement("div");
+            var idDiv = document.createElement("div");
+            var dobDiv = document.createElement("div");
+            var imgDiv = document.createElement("div");
+            nameDiv.appendChild(nameLabel);
+            nameDiv.appendChild(nameElement);
+            resultElement.appendChild(nameDiv);
+            idDiv.appendChild(idLabel);
+            idDiv.appendChild(idElement);
+            resultElement.appendChild(idDiv);
+            dobDiv.appendChild(passportLabel);
+            dobDiv.appendChild(passportElement);
+            resultElement.appendChild(dobDiv);
+            imgDiv.appendChild(imageElement);
+            resultElement.appendChild(imgDiv);
+
+            searchResultsElement.appendChild(resultElement);
+          });
+        }
+      }
+    </script>
+  </body>
+</html>

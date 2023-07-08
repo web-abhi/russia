@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Welcome To Russia Visa And Citizen Services</title>
+  <style>
+    body {
+      background-image: url('https://russia-visacentre.com/img/get-your-visa-alt.jpg');
+      background-size: cover;
+      background-position: center;
+      font-family: Arial, sans-serif;
+    }
+
+    #content {
+      width: 300px;
+      margin: 150px auto;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 20px;
+      border-radius: 5px;
+    }
+
+    #newd{
+      /* width: 300px; */
+      margin: 150px auto;
+      padding: 20px;
+      border-radius: 5px;
+    }
+
+    h2{
+    font-family: GTSectraDisplay,serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 5rem;
+    text-align: center;
+    color: white;
+    margin-bottom: -80px;
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      margin-bottom: -80px;
+      
+    }
+
+    select {
+      width: 100%;
+      height: 40px;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      display: none;
+      width: 100px;
+      height: 40px;
+      margin-left: 10px;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      position: absolute;
+      top: 67%;
+      left: 67%;
+      transform: translate(-50%, -50%);
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .label-container {
+      /* display: flex; */
+      align-items: center;
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+
+    .label2 {
+      margin-right: 10px;
+    }
+  </style>
+  <script>
+    function showButton() {
+      var dropdown = document.getElementById("country");
+      var button = document.getElementById("goButton");
+      if (dropdown.value !== "") {
+        button.style.display = "block";
+      } else {
+        button.style.display = "none";
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="newd">
+    <h2>Welcome to Russia Visa and Citizen Services</h2>
+  </div>
+</body>
+<body>
+  <div id="content">
+    <form action="second.html">
+      <div class="label-container">
+        <span class="label2">I'm Resident of:</span>
+        <select name="country" id="country" onchange="showButton()">
+          <option value="">Select a country</option>
+          <option value="Belgium">Belgium</option>
+          <option value="Bulgaria">Bulgaria</option>
+          <option value="Canada">Canada</option>
+          <option value="Czech Republic">Czech Republic</option>
+          <option value="Estonia">Estonia</option>
+          <option value="France">France</option>
+          <option value="Germany">Germany</option>
+          <option value="Greece">Greece</option>
+          <option value="India">India</option>
+          <option value="Latvia">Latvia</option>
+          <option value="Lithuania">Lithuania</option>
+          <option value="Poland">Poland</option>
+          <option value="Potugal">Potugal</option>
+          <option value="Romania">Romania</option>
+          <option value="Singapore">Singapore</option>
+          <option value="Switezerland">Switezerland</option>
+          <option value="Turkey">Turkey</option>
+          <option value="United Arab Emirates">United Arab Emirates</option>
+          <option value="United Kingdom">United Kingdom</option>
+          <option value="USA">USA</option>
+          <option value="Vietnam">Vietnam</option>
+          <!-- Add more options as needed -->
+        </select>
+      </div>
+      <div class="button-container">
+        <button id="goButton" class="btn" type="submit">Go</button>
+      </div>
+      <a href="second2.html" class="btn">Continue</a>
+    </form>
+  </div>
+</body>
+
+</html>

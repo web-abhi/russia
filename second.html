@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: rgba(0, 0, 0, 0.5); /* Background color with opacity */
+            background-image: url('https://images.prismic.io/artionis-ru/e0e744bd-2ba2-4ef5-afa6-f4cef4a1f04c_russia.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: fill;
+        }
+
+        #resultContainer {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            overflow: hidden; /* Crop the content that exceeds the container size */
+        }
+
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 80%;
+            background-color: #b4bbd3; /* White background color */
+        }
+
+        td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            font-weight: bold; /* Add bold font style to all table cells */
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+        }
+
+        header h2 {
+            margin: 0;
+        }
+
+        header nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        header nav ul li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        header nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .search-container {
+            margin-top: 80px;
+            margin-bottom: 180px;
+        }
+
+        .search-container input[type=text] {
+            padding: 10px;
+            width: 300px;
+        }
+
+        .search-container input[type=submit] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+        }
+
+        #noUserFound {
+            background-color: #fff; /* White background color */
+            padding: 20px; /* Increase the padding to create a larger background */
+            display: inline-block; /* Set the display to inline-block to adjust to the content size */
+            margin-top: 20px; /* Add some margin to separate it from the table */
+            font-weight: bold; /* Add bold font style to the message */
+            font-size: 24px; /* Increase the font size */
+            width: 300px; /* Set a specific width for the container */
+            margin-left: auto; /* Align the container to the center horizontally */
+            margin-right: auto;
+        }
+
+        #welcomeMessage {
+            color: #fff;
+            font-size: 40px;
+            margin-top: 50px;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h2>RussiaServiceCentre</h2>
+        <nav>
+            <ul>
+                <li><a href="finalvisa.html">Track Your Application</a></li>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="welcomeMessage">
+       Discover how easy it is to get a Russian Visa </br>
+    </div>
+
+    <div id="resultContainer">
+        <table id="resultTable">
+            <tbody id="tableBody">
+            </tbody>
+        </table>
+        <p id="noUserFound"></p>
+    </div>
+
+    <script>
+        var csvFile = 'data.csv'; // Path to your CSV file
+
+function loadCSV(file) {
+    fetch(file)
+        .then(response => response.text())
+        .then(data => {
+            var rows = data.split('\n');
+            var headers = rows[0].split(',');
+            var users = [];
+
+            for (var i = 1; i < rows.length; i++) {
+                var values = rows[i].split(',');
+                var user = {};
+
+                for (var j = 0; j < headers.length; j++) {
+                    user[headers[j]] = values[j];
+                }
+
+                users.push(user);
+            }
+
+            document.getElementById('searchForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                var nameInput = document.getElementById('nameInput').value.trim().toLowerCase();
+                var tableBody = document.getElementById('tableBody');
+                var noUserFound = document.getElementById('noUserFound');
+                tableBody.innerHTML = '';
+                noUserFound.textContent = '';
+
+                if (nameInput === '') {
+                    document.getElementById('resultContainer').style.display = 'none';
+                    return;
+                }
+
+                var matchedUsers = users.filter(function(user) {
+                    return user.Name.toLowerCase().includes(nameInput);
+                });
+
+                if (matchedUsers.length > 0) {
+                    var user = matchedUsers[0]; // Assuming there's only one matched user
+
+                    var attributes = Object.keys(user);
+
+                    for (var i = 0; i < attributes.length; i++) {
+                        var attribute = attributes[i];
+
+                        var newRow = document.createElement('tr');
+
+                        var attributeCell = document.createElement('td');
+                        attributeCell.textContent = attribute + ":";
+                        attributeCell.classList.add('bold'); // Add bold class to attribute cell
+                        newRow.appendChild(attributeCell);
+
+                        var valueCell = document.createElement('td');
+                        valueCell.textContent = user[attribute];
+                        newRow.appendChild(valueCell);
+
+                        tableBody.appendChild(newRow);
+                    }
+
+                    document.getElementById('resultContainer').style.display = 'block';
+                    noUserFound.style.display = 'none'; // Hide the "No user found" message
+                } else {
+                    noUserFound.textContent = 'No user found';
+                    document.getElementById('resultContainer').style.display = 'block';
+                    noUserFound.style.display = 'block'; // Show the "No user found" message
+                }
+            });
+        });
+}
+
+loadCSV(csvFile);
+
+    </script>
+</body>
+</html>
